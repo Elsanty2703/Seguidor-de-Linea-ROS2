@@ -4,6 +4,7 @@ void PID_init(PID* pid, float Kp, float Ki, float Kd) {
     
     pid->type = P;
     pid->enabled = false;
+    pid->ready = false;
 
     pid->Kp = Kp;
     pid->Ki = Ki;
@@ -14,14 +15,28 @@ void PID_init(PID* pid, float Kp, float Ki, float Kd) {
     pid->output = 0;
 }
 
-void PID_enable(PID* pid) {
-    pid->enabled = true;
+void PID_setEnabled(PID* pid, bool value) {
+    pid->enabled = value;
 }
 
-void PID_disable(PID* pid) {
-    pid->enabled = false;
+void PID_setReady(PID* pid, bool value) {
+    pid->ready = value;
 }
 
-int PID_calculate(PID* pid, float measuredValue){
-    return 100;
+bool PID_getEnabled(PID* pid) {
+    return pid->enabled;
+}
+
+bool PID_getReady(PID* pid) {
+    return pid->ready;
+}
+
+int PID_getOutput(PID* pid) {
+    return pid->output;
+}
+
+void PID_calculate(PID* pid) {
+    //calculo del PID con maquina de estados finitos
+    pid->output = 30;
+    pid->ready = true;
 }

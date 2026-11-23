@@ -13,6 +13,7 @@ typedef enum {
 struct PID {
     PIDType type;
     bool enabled;
+    bool ready;
     float Kp;
     float Ki;
     float Kd;
@@ -23,9 +24,13 @@ struct PID {
 
 void PID_init(PID* pid, float Kp, float Ki, float Kd);
 
-void PID_enable(PID* pid);
-void PID_disable(PID* pid);
+void PID_setEnabled(PID* pid, bool value);
+void PID_setReady(PID* pid, bool value);
 
-int PID_calculate(PID* pid, float measuredValue);
+bool PID_getEnabled(PID* pid);
+bool PID_getReady(PID* pid);
+int PID_getOutput(PID* pid);
+
+void PID_calculate(PID* pid);
 
 #endif // PID_H (Cierre de la guarda de inclusión)

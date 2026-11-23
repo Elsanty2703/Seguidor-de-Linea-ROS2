@@ -10,14 +10,21 @@
 struct Control {
     bool start;
     bool stby;
+    unsigned long time;
+    unsigned long ts;
+    int velbase;
 };
 
-void Control_init(Control* control);
+void Control_init(Control* control, unsigned long Ts, int velBase);
 
 void Control_setStart(Control* control, bool value);
 void Control_setStby(Control* control, bool value);
+void Control_setTime(Control* control);
+void Control_setVelBase(Control* control, int velBase);
 
 bool Control_getStart(Control* control);
 bool Control_getStby(Control* control);
+bool Control_getTime(Control* control);
+int Control_getVelBase(Control* control);
 
 #endif // CONTROL_H (Cierre de la guarda de inclusión)

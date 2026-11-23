@@ -8,6 +8,8 @@
 
 //Control
 Control control;
+unsigned long Ts = 100;
+int velBase = 100;
 
 //Motor
 Motor motores[2];
@@ -30,7 +32,7 @@ float Kd = 0.0;
 void setup() {
 
   //Configuración de las variables de control
-  Control_init(&control);
+  Control_init(&control, Ts, velBase);
 
   //Configuración del wifi
   if(!Wifi_init()){
@@ -56,13 +58,13 @@ void loop() {
   if(digitalRead(STOP) == HIGH) {
     Control_setStby(&control, false);
     Control_setStart(&control, false);
-
-    //Prueba de lectura de sensores
-    Sensores_measure(&sensores);
+    PID_setEnabled(&pid, false);
 
   } else if(digitalRead(START) == HIGH) {
     Control_setStby(&control, true);
     Control_setStart(&control, true);
+    Control_setTime(&control);
+
   }
 
   SeguidorLinea_init(&control, motores, &sensores, &pid);

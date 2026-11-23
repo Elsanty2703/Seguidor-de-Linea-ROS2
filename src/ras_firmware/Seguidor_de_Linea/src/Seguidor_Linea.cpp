@@ -1,21 +1,31 @@
 #include "Seguidor_Linea.h"
 
 void SeguidorLinea_init(Control* control, Motor* motores, Sensores* sensores, PID* pid) {
-    if(Control_getStart(control) && Control_getStby(control)) {
-        // Leer los valores de los sensores y retornar el error
-        float error = 0 - Sensores_measure(sensores); // Suponiendo que el valor deseado es 0
+    
+    if(!Control_getStart(control)) {
+        Motor_Stop(&motores[0]);
+        Motor_Stop(&motores[1]);
+    } else if(Control_getTime(control)) {
+        pid->Error = 0 - Sensores_measure(sensores);
+        PID_setEnabled(pid, true);
+        Control_setTime(control);
+        
+    }
 
-        // Calcular la salida del PID
-        float pidOutput = PID_calculate(pid, error);
+    if (PID_getEnabled(pid)) {
+        PID_calculate(pid);
+    }
 
+    if(PID_getReady(pid)) {
         // Ajustar la velocidad de los motores según la salida del PID
-        int pwmA = constrain(pidOutput, -255, 255); // Ajusta según tus necesidades
-        int pwmB = constrain(pidOutput, -255, 255); // Ajusta según tus necesidades
+        int vel = Control_getVelBase(control);
+        int pwmA = constrain(vel - PID_getOutput(pid), -255, 255); // Ajusta según tus necesidades
+        int pwmB = constrain(vel + PID_getOutput(pid), -255, 255); // Ajusta según tus necesidades
 
         Motor_setPWM(&motores[0], pwmA);
         Motor_setPWM(&motores[1], pwmB);
-    } else {
-        Motor_Stop(&motores[0]);
-        Motor_Stop(&motores[1]);
+
+        PID_setReady(pid, false);
+        PID_setEnabled(pid, false);
     }
 }
