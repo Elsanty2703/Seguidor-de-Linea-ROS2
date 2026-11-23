@@ -26,7 +26,6 @@ struct Motor {
 void MotorA_init(Motor* motor);
 void MotorB_init(Motor* motor);
 
-void Motor_Start(Motor* motor, int PWM);
 void Motor_Stop(Motor* motor);
 
 void Motor_setPWM(Motor* motor, int PWM);

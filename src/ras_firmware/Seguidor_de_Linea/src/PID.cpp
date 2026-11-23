@@ -21,3 +21,7 @@ void PID_enable(PID* pid) {
 void PID_disable(PID* pid) {
     pid->enabled = false;
 }
+
+int PID_calculate(PID* pid, float measuredValue){
+    return 100;
+}
