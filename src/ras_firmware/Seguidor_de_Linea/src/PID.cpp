@@ -37,6 +37,6 @@ int PID_getOutput(PID* pid) {
 
 void PID_calculate(PID* pid) {
     //calculo del PID con maquina de estados finitos
-    pid->output = 30;
+    pid->output = 0;
     pid->ready = true;
 }

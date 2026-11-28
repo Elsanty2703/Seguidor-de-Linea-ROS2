@@ -6,9 +6,8 @@ void MotorA_init(Motor* motor) {
     digitalWrite(AIN1, LOW);
     pinMode(AIN2, OUTPUT);
     digitalWrite(AIN2, LOW);
-    ledcSetup(0, 20000, 8);
-    ledcAttachPin(PWMA, 0);
-    ledcWrite(0, 0);
+    ledcAttach(PWMA, 20000, 8);
+    ledcWrite(PWMA, 0);
 
     motor->id = MOTOR_A;
     motor->PWM = 0;
@@ -20,9 +19,8 @@ void MotorB_init(Motor* motor) {
     digitalWrite(BIN1, LOW);
     pinMode(BIN2, OUTPUT);
     digitalWrite(BIN2, LOW);
-    ledcSetup(1, 20000, 8);
-    ledcAttachPin(PWMB, 1);
-    ledcWrite(1, 0);
+    ledcAttach(PWMB, 20000, 8);
+    ledcWrite(PWMB, 0);
 
     motor->id = MOTOR_B;
     motor->PWM = 0;
@@ -33,15 +31,16 @@ void Motor_Stop(Motor* motor) {
     if (motor->id == MOTOR_A) {
         digitalWrite(AIN1, HIGH);
         digitalWrite(AIN2, HIGH);
-        ledcWrite(0, 0);
+        ledcWrite(PWMA, 0);
     } else if (motor->id == MOTOR_B) {
         digitalWrite(BIN1, HIGH);
         digitalWrite(BIN2, HIGH);
-        ledcWrite(1, 0);
+        ledcWrite(PWMB, 0);
     }
 }
 
 void Motor_setPWM(Motor* motor, int PWM) {
+    PWM = constrain(PWM, -255, 255);
     motor->PWM = PWM;
 
     if (motor->id == MOTOR_A) {
@@ -53,7 +52,7 @@ void Motor_setPWM(Motor* motor, int PWM) {
             digitalWrite(AIN2, HIGH);
             PWM = -PWM; // Convertir a positivo para el duty cycle
         }
-        ledcWrite(0, PWM);
+        ledcWrite(PWMA, PWM);
 
     } else if (motor->id == MOTOR_B) {
         if(PWM >= 0){
@@ -64,6 +63,6 @@ void Motor_setPWM(Motor* motor, int PWM) {
             digitalWrite(BIN2, LOW);
             PWM = -PWM; // Convertir a positivo para el duty cycle
         }
-        ledcWrite(1, PWM);
+        ledcWrite(PWMB, PWM);
     }
 }

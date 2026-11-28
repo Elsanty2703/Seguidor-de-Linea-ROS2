@@ -29,6 +29,8 @@ float Kp = 1.0;
 float Ki = 0.0;
 float Kd = 0.0;
 
+bool valor = false;
+
 void setup() {
 
   //Configuración de las variables de control
@@ -51,6 +53,11 @@ void setup() {
   //Configuración del PID
   PID_init(&pid, Kp, Ki, Kd);
 
+  Control_setStby(&control, true);
+  Control_setStart(&control, true);
+  Control_setTime(&control);
+  setEnabled(&sensores, true);
+  
 }
 
 void loop() {
@@ -59,11 +66,13 @@ void loop() {
     Control_setStby(&control, false);
     Control_setStart(&control, false);
     PID_setEnabled(&pid, false);
+    setEnabled(&sensores, false);
 
   } else if(digitalRead(START) == HIGH) {
     Control_setStby(&control, true);
     Control_setStart(&control, true);
     Control_setTime(&control);
+    setEnabled(&sensores, true);
 
   }
 

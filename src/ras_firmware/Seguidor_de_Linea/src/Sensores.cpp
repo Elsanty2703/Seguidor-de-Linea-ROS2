@@ -8,6 +8,8 @@ void Sensores_init(Sensores* sensores, int D2, int D3, int D4, int D5, int D6, i
     pinMode(IR_D5, INPUT);
     pinMode(IR_D6, INPUT);
     pinMode(IR_D7, INPUT);
+    pinMode(IR, OUTPUT);
+    digitalWrite(IR, LOW); 
     analogReadResolution(12);
 
     sensores->sensorValues[0] = 0;
@@ -25,6 +27,8 @@ void Sensores_init(Sensores* sensores, int D2, int D3, int D4, int D5, int D6, i
     sensores->sensorWeights[5] = D7;
 
     sensores->measuredValue = 0.0;
+
+    sensores->enabled = false; // Inicialmente deshabilitado
 }
 
 float Sensores_measure(Sensores* sensores) {
@@ -54,4 +58,8 @@ float Sensores_measure(Sensores* sensores) {
     Serial_print(sensores->measuredValue);
 
     return sensores->measuredValue;
+}
+
+void setEnabled(Sensores* sensores, bool enabled) {
+    sensores->enabled = enabled;
 }
